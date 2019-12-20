@@ -9,18 +9,56 @@
     <script type="text/javascript" src="js/functions_dev.js"></script>
 </head>
 
-
+<script>
+    $(document).ready(function(){
+        $("#music_a").click();
+        autoPlayMusic();
+        audioAutoPlay();
+    });
+    function audioAutoPlay() {
+        var audio = document.getElementById('music');
+        audio.play();
+    }
+    // 音乐播放
+    function autoPlayMusic() {
+        // 自动播放音乐效果，解决浏览器或者APP自动播放问题
+        function musicInBrowserHandler() {
+            musicPlay(true);
+            document.body.removeEventListener('touchstart', musicInBrowserHandler);
+        }
+        document.body.addEventListener('touchstart', musicInBrowserHandler);
+        // 自动播放音乐效果，解决微信自动播放问题
+        function musicInWeixinHandler() {
+            musicPlay(true);
+            document.addEventListener("WeixinJSBridgeReady", function () {
+                musicPlay(true);
+            }, false);
+            document.removeEventListener('DOMContentLoaded', musicInWeixinHandler);
+        }
+        document.addEventListener('DOMContentLoaded', musicInWeixinHandler);
+    }
+    function musicPlay(isPlay) {
+        var media = document.querySelector('#bg-music');
+        if (isPlay && media.paused) {
+            media.play();
+        }
+        if (!isPlay && !media.paused) {
+            media.pause();
+        }
+    }
+</script>
 <body>
-<audio src="music/要不要买菜 - 下山.mp3" autoplay>
-    您的浏览器不支持 audio 标签。
-</audio>
+
 <!--背景-->
 <canvas id="sakura" style=" position: absolute ;z-index: 1"></canvas>
 
 <div style="position: absolute ;z-index: 9999" id="mainDiv">
 
     <div id="content">
-
+        <a style="display: none" id="music_a" href="#">121313</a>
+        <audio id="music" src="music/要不要买菜 - 下山.mp3" autoplay="autoplay">
+            您的浏览器不支持 audio 标签。
+        </audio>
         <div id="code">
             <span class="comments">我的爱人</span><br/>
             <span class="space"/><span class="comments">我会牵着你的手，走到我们满头白发的那一天</span><br/>
